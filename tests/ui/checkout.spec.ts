@@ -3,8 +3,8 @@ import { expect, test } from '../../fixtures/ui.fixtures';
 import { SAUCE_USERS } from '../../utils/testData';
 
 // Flujo E2E completo: agregar producto -> carrito -> checkout -> confirmación.
-// Trazable a docs/checkout.feature
-test.describe('Checkout', () => {
+// Trazable a docs/ui/checkout.feature
+test.describe('Checkout', { tag: ['@ui', '@checkout'] }, () => {
   test('completes a purchase end to end @TC-CHK-01 @smoke', async ({
     authenticatedPage,
     cartPage,
@@ -64,7 +64,7 @@ test.describe('Checkout', () => {
   // Bug conocido de la app: error_user completa el checkout hasta el paso de
   // resumen, pero "Finish" no confirma la compra ni lo redirige a la
   // pantalla de confirmación. Verificado manualmente contra el sitio.
-  test('known defect: error_user cannot finish checkout @TC-CHK-04 @regression', async ({
+  test('known defect: error_user cannot finish checkout @TC-CHK-04 @regression @known-defect', async ({
     page,
     loginPage,
     inventoryPage,

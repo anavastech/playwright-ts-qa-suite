@@ -1,7 +1,7 @@
 import { expect, test } from '../../fixtures/ui.fixtures';
 
-// Trazable a docs/product-detail.feature
-test.describe('Product detail', () => {
+// Trazable a docs/ui/product-detail.feature
+test.describe('Product detail', { tag: ['@ui', '@product-detail'] }, () => {
   test('shows the same name and price as the inventory listing @TC-PROD-01 @smoke', async ({
     authenticatedPage,
     productDetailPage,

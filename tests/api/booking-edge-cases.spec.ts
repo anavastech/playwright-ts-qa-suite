@@ -1,8 +1,8 @@
 import { expect, test } from '../../fixtures/api.fixtures';
 import { buildBooking } from '../../utils/testData';
 
-// Casos negativos y de contrato, trazable a docs/booking-api.feature
-test.describe('Booking API edge cases', () => {
+// Casos negativos y de contrato, trazable a docs/api/booking-edge-cases.feature
+test.describe('Booking API edge cases', { tag: ['@api', '@booking'] }, () => {
   test('returns 404 for a booking id that does not exist @TC-BOOK-05 @negative', async ({ request }) => {
     const response = await request.get('/booking/999999999');
 
@@ -12,7 +12,7 @@ test.describe('Booking API edge cases', () => {
   // Comportamiento real verificado contra la API: un body vacío no se
   // rechaza con 400 (mala práctica de la API), responde 500. Documentamos
   // el comportamiento actual, no el ideal.
-  test('creating a booking with an empty body returns a server error @TC-BOOK-06 @negative', async ({
+  test('creating a booking with an empty body returns a server error @TC-BOOK-06 @negative @known-defect', async ({
     request,
   }) => {
     const response = await request.post('/booking', { data: {} });
@@ -22,7 +22,7 @@ test.describe('Booking API edge cases', () => {
 
   // Mismo comportamiento que el body vacío: faltar un campo requerido
   // también deriva en 500 en vez de un 400 con detalle del campo faltante.
-  test('creating a booking with missing required fields returns a server error @TC-BOOK-09 @negative', async ({
+  test('creating a booking with missing required fields returns a server error @TC-BOOK-09 @negative @known-defect', async ({
     request,
   }) => {
     const response = await request.post('/booking', { data: { firstname: 'OnlyFirstName' } });
@@ -34,7 +34,7 @@ test.describe('Booking API edge cases', () => {
   // (string en vez de number) no se rechaza — la API crea la reserva igual
   // y el campo queda en null. Documentamos el comportamiento actual, no el
   // ideal, y limpiamos el dato creado para no ensuciar el entorno compartido.
-  test('creating a booking with an invalid field type silently nulls the field @TC-BOOK-10 @negative', async ({
+  test('creating a booking with an invalid field type silently nulls the field @TC-BOOK-10 @negative @known-defect', async ({
     request,
     authenticatedRequest,
   }) => {
@@ -76,7 +76,7 @@ test.describe('Booking API edge cases', () => {
   // Comportamiento real verificado contra la API: credenciales inválidas no
   // devuelven 401/403, responde 200 con { reason: "Bad credentials" }.
   // Documentamos el comportamiento actual, no el ideal.
-  test('invalid credentials return 200 with a reason instead of an auth error @TC-BOOK-08 @negative', async ({
+  test('invalid credentials return 200 with a reason instead of an auth error @TC-BOOK-08 @negative @known-defect', async ({
     request,
   }) => {
     const response = await request.post('/auth', {

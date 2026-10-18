@@ -1,8 +1,8 @@
 import { expect, test } from '../../fixtures/ui.fixtures';
 import { SAUCE_USERS } from '../../utils/testData';
 
-// Casos trazables a docs/login.feature
-test.describe('Login', () => {
+// Casos trazables a docs/ui/login.feature
+test.describe('Login', { tag: ['@ui', '@login'] }, () => {
   test('standard user can access the inventory page @TC-LOGIN-01 @smoke', async ({ page, loginPage }) => {
     await loginPage.goto();
     await loginPage.login(SAUCE_USERS.standard.username, SAUCE_USERS.standard.password);

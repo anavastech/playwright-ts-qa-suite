@@ -1,7 +1,7 @@
 import { expect, test } from '../../fixtures/ui.fixtures';
 
-// Trazable a docs/cart.feature
-test.describe('Cart', () => {
+// Trazable a docs/ui/cart.feature
+test.describe('Cart', { tag: ['@ui', '@cart'] }, () => {
   test('continue shopping returns to the inventory without losing the cart @TC-CART-01 @smoke', async ({
     page,
     authenticatedPage,
@@ -35,7 +35,7 @@ test.describe('Cart', () => {
   // badge del carrito de inmediato, pero la lista de items ya renderizada en
   // cart.html no se actualiza hasta que la página vuelve a renderizarse
   // (navegación o reload). Documentamos el comportamiento actual, no el ideal.
-  test('known defect: reset app state clears the badge but not the rendered cart list @TC-CART-03', async ({
+  test('known defect: reset app state clears the badge but not the rendered cart list @TC-CART-03 @regression @known-defect', async ({
     authenticatedPage,
     cartPage,
   }) => {

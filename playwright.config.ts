@@ -1,10 +1,13 @@
+import * as path from 'node:path';
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config({ quiet: true });
 
 export const UI_BASE_URL = process.env.UI_BASE_URL ?? 'https://www.saucedemo.com';
 export const API_BASE_URL = process.env.API_BASE_URL ?? 'https://restful-booker.herokuapp.com';
+// Sesión de standard_user generada por tests/setup/auth.setup.ts (ignorada en git).
+export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/standard-user.json');
 
 export default defineConfig({
   testDir: './tests',
@@ -26,18 +29,29 @@ export default defineConfig({
   },
   projects: [
     {
+      // Login único compartido por todos los proyectos de UI: la cookie de
+      // sesión no depende del navegador, así que basta generarla una vez.
+      name: 'ui-setup',
+      testDir: './tests/setup',
+      testMatch: /.*\.setup\.ts/,
+      use: { ...devices['Desktop Chrome'], baseURL: UI_BASE_URL },
+    },
+    {
       name: 'ui-chromium',
       testDir: './tests/ui',
+      dependencies: ['ui-setup'],
       use: { ...devices['Desktop Chrome'], baseURL: UI_BASE_URL },
     },
     {
       name: 'ui-firefox',
       testDir: './tests/ui',
+      dependencies: ['ui-setup'],
       use: { ...devices['Desktop Firefox'], baseURL: UI_BASE_URL },
     },
     {
       name: 'ui-webkit',
       testDir: './tests/ui',
+      dependencies: ['ui-setup'],
       use: { ...devices['Desktop Safari'], baseURL: UI_BASE_URL },
     },
     {
@@ -45,6 +59,7 @@ export default defineConfig({
       // el tiempo de la suite completa en un form factor secundario.
       name: 'ui-mobile',
       testDir: './tests/ui',
+      dependencies: ['ui-setup'],
       grep: /@smoke/,
       use: { ...devices['Pixel 5'], baseURL: UI_BASE_URL },
     },

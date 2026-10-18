@@ -1,10 +1,11 @@
+import { readFile } from 'node:fs/promises';
 import { test as base } from '@playwright/test';
 import { CartPage } from '../pages/CartPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
 import { InventoryPage } from '../pages/InventoryPage';
 import { LoginPage } from '../pages/LoginPage';
 import { ProductDetailPage } from '../pages/ProductDetailPage';
-import { SAUCE_USERS } from '../utils/testData';
+import { STORAGE_STATE } from '../playwright.config';
 
 type UiFixtures = {
   loginPage: LoginPage;
@@ -31,19 +32,21 @@ export const test = base.extend<UiFixtures>({
   productDetailPage: async ({ page }, use) => {
     await use(new ProductDetailPage(page));
   },
-  // Fixture de autenticación: evita repetir el login en cada test que
-  // necesita partir ya logueado (checkout, carrito, etc.).
+  // Fixture de autenticación: reutiliza la sesión que generó el proyecto
+  // `ui-setup` en vez de loguearse por la UI en cada test. No se usa
+  // `test.use({ storageState })` porque en un mismo spec conviven tests
+  // logueados y no logueados (ej. login.spec.ts): la cookie se inyecta solo
+  // en los tests que piden este fixture.
   authenticatedPage: async ({ page }, use) => {
-    const loginPage = new LoginPage(page);
+    const { cookies } = JSON.parse(await readFile(STORAGE_STATE, 'utf-8'));
+    await page.context().addCookies(cookies);
+
     const inventoryPage = new InventoryPage(page);
-    await loginPage.goto();
-    await loginPage.login(SAUCE_USERS.standard.username, SAUCE_USERS.standard.password);
-    await page.waitForURL('**/inventory.html');
-    // waitForURL solo confirma el cambio de URL (history API); el listado
-    // puede tardar un instante más en renderizar. allTextContents()/count()
-    // no reintentan como sí lo hacen las acciones (click, selectOption), por
-    // eso cualquier lectura "bulk" inmediatamente después del login podría
-    // leer el DOM antes de tiempo si no esperamos este render.
+    await page.goto('/inventory.html');
+    // goto espera el load del documento, pero el SPA renderiza el listado
+    // un instante después. allTextContents()/count() no reintentan como sí
+    // lo hacen las acciones (click, selectOption), por eso cualquier lectura
+    // "bulk" inmediata podría leer el DOM antes de tiempo sin esta espera.
     await inventoryPage.itemNames.first().waitFor();
     await use(inventoryPage);
   },

@@ -5,8 +5,8 @@ import { SAUCE_USERS } from '../../utils/testData';
 // Chequeo de accesibilidad (WCAG 2.0 A/AA) sobre las pantallas clave del
 // flujo de compra. No reemplaza una auditoría manual, pero atrapa
 // regresiones de accesibilidad introducidas sin darse cuenta (contraste,
-// labels, roles ARIA, etc.). Trazable a docs/accessibility.feature
-test.describe('Accessibility', () => {
+// labels, roles ARIA, etc.). Trazable a docs/ui/accessibility.feature
+test.describe('Accessibility', { tag: ['@ui', '@a11y'] }, () => {
   test('login page has no WCAG 2.0 A/AA violations @TC-A11Y-01 @regression', async ({ page, loginPage }) => {
     await loginPage.goto();
 

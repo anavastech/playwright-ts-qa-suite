@@ -35,6 +35,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Traceability (docs/*.feature <-> specs)
+        run: npm run check:traceability
+
       # En push/PR corremos solo @smoke para feedback rápido; la suite
       # completa (incluye @regression, @negative y los 4 browsers/projects)
       # corre en el cron nocturno o manualmente con workflow_dispatch.

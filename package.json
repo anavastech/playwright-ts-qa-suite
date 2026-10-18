@@ -13,6 +13,7 @@
     "test:regression": "playwright test --grep @regression",
     "test:report": "playwright show-report",
     "typecheck": "tsc --noEmit",
+    "check:traceability": "node scripts/check-traceability.mjs",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write ."

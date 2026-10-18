@@ -3,8 +3,8 @@ import { expect, test } from '../../fixtures/api.fixtures';
 import { bookingSchema, createBookingResponseSchema } from '../../utils/schemas';
 import { buildBooking } from '../../utils/testData';
 
-// CRUD completo sobre /booking, trazable a docs/booking-api.feature
-test.describe('Booking API', () => {
+// CRUD completo sobre /booking, trazable a docs/api/booking.feature
+test.describe('Booking API', { tag: ['@api', '@booking'] }, () => {
   test('returns a valid authentication token @TC-BOOK-01 @smoke', async ({ authToken }) => {
     expect(authToken).toEqual(expect.any(String));
     expect(authToken.length).toBeGreaterThan(0);

@@ -41,8 +41,8 @@ const SORT_CASES: SortCase[] = [
   },
 ];
 
-// Trazable a docs/inventory.feature
-test.describe('Inventory', () => {
+// Trazable a docs/ui/inventory.feature
+test.describe('Inventory', { tag: ['@ui', '@inventory'] }, () => {
   for (const { option, label, tag, getValues, sort } of SORT_CASES) {
     test(`sorts products by ${label} @TC-INV-01 ${tag}`, async ({ authenticatedPage }) => {
       await authenticatedPage.sortBy(option);
@@ -84,7 +84,7 @@ test.describe('Inventory', () => {
 
   // Bug conocido de la app: para problem_user el sort no reordena los productos.
   // Verificado manualmente contra el sitio antes de escribir el test.
-  test('known defect: sorting does not work for problem_user @TC-INV-05 @regression', async ({
+  test('known defect: sorting does not work for problem_user @TC-INV-05 @regression @known-defect', async ({
     page,
     loginPage,
     inventoryPage,

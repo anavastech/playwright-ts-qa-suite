@@ -4,8 +4,8 @@ import { bookingIdsResponseSchema } from '../../utils/schemas';
 import { buildBooking } from '../../utils/testData';
 
 // Búsqueda vía GET /booking?firstname=&lastname=&checkin=&checkout=
-// Trazable a docs/booking-api.feature
-test.describe('Booking API search', () => {
+// Trazable a docs/api/booking-search.feature
+test.describe('Booking API search', { tag: ['@api', '@booking'] }, () => {
   test('filters bookings by firstname and lastname @TC-BOOK-13 @regression', async ({
     request,
     authenticatedRequest,
@@ -39,7 +39,7 @@ test.describe('Booking API search', () => {
   // no acota los resultados a reservas con esas fechas exactas (una reserva
   // recién creada con esas fechas no aparece en el resultado). Documentamos
   // el comportamiento actual, no el ideal.
-  test('known defect: filtering by exact checkin/checkout does not return the matching booking @TC-BOOK-15 @regression', async ({
+  test('known defect: filtering by exact checkin/checkout does not return the matching booking @TC-BOOK-15 @regression @known-defect', async ({
     request,
     authenticatedRequest,
   }) => {
